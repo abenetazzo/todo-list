@@ -1,0 +1,60 @@
+# Build output
+bin/
+obj/
+out/
+TestResults/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# Logs & temp
+*.log
+*.tmp
+*.cache
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# ASP.NET Core specific
+# File generati dal runtime
+*.db
+*.db-shm
+*.db-wal
+
+# Configurazioni locali (non versionare mai credenziali)
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+.env
+
+# User Secrets (cartella locale)
+**/Properties/launchSettings.json
+
+# File generati automaticamente
+*.designer.cs
+*.generated.cs
+*.g.cs
+*.g.i.cs
+
+# Coverage / strumenti
+coverage/
+*.coverage
+*.coveragexml
+
+# Docker (se usi container)
+**/docker-compose.override.yml
+
+# Mac specific
+.DS_Store
