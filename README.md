@@ -23,3 +23,15 @@ Aggiunti endpoint GET "/todos/{id}" per ottenere singolo TodoItem e DELETE "/tod
 ### Step 5
 
 Aggiunto endpoint PUT "/todos/{id}" per aggiornare un TodoItem esistente.
+
+### Step 6
+
+Fatto refactor della repository e aggiunto progetto di test
+
+### Step 7
+
+Aggiunti test di integrazione per tutti gli endpoint
+
+### Step 8
+
+Aggiunto report di copertura dei test.
