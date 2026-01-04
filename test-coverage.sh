@@ -1,5 +1,5 @@
 #!/bin/bash
-dotnet test --no-build --collect:"XPlat Code Coverage" && \
+dotnet test tests/Web.Api.Tests --no-build --collect:"XPlat Code Coverage" && \
 reportgenerator \
   -reports:"**/coverage.cobertura.xml" \
   -targetdir:"coveragereport" \

@@ -217,7 +217,8 @@ var assemblies = [
       { "name": "Web.Api.Models.PatchTodoItemDTO", "rp": "Web.Api_PatchTodoItemDTO.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Web.Api.Models.TodoItem", "rp": "Web.Api_TodoItem.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Web.Api.Models.UpdateTodoItemDTO", "rp": "Web.Api_UpdateTodoItemDTO.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Web.Api.Program", "rp": "Web.Api_Program.html", "cl": 73, "ucl": 6, "cal": 79, "tl": 113, "cb": 13, "tb": 16, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Web.Api.Program", "rp": "Web.Api_Program.html", "cl": 21, "ucl": 3, "cal": 24, "tl": 44, "cb": 10, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Web.Api.Services.TodoService", "rp": "Web.Api_TodoService.html", "cl": 38, "ucl": 0, "cal": 38, "tl": 56, "cb": 10, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -226,17 +227,9 @@ var metrics = [{ "name": "Crap Score", "abbreviation": "crp", "explanationUrl": 
 var historicCoverageExecutionTimes = [];
 
 var riskHotspotMetrics = [
-      { "name": "Crap Score", "explanationUrl": "https://googletesting.blogspot.de/2011/02/this-code-is-crap.html" },
-      { "name": "Cyclomatic complexity", "explanationUrl": "https://en.wikipedia.org/wiki/Cyclomatic_complexity" },
 ];
 
 var riskHotspots = [
-  {
-    "assembly": "Web.Api", "class": "Web.Api.Program", "reportPath": "Web.Api_Program.html", "methodName": "Main(System.String[])", "methodShortName": "Main(...)", "fileIndex": 0, "line": 8,
-    "metrics": [
-      { "value": 16, "exceeded": false },
-      { "value": 16, "exceeded": true },
-    ]},
 ];
 
 var branchCoverageAvailable = true;

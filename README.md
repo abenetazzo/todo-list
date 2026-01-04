@@ -35,3 +35,7 @@ Aggiunti test di integrazione per tutti gli endpoint
 ### Step 8
 
 Aggiunto report di copertura dei test.
+
+### Step 9
+
+Aggiunti test di unità e fatto refacto di Program.cs spostando la logica in un servizio esterno.

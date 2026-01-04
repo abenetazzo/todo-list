@@ -13,7 +13,6 @@ public class TodosEndpointTests : IClassFixture<CustomWebApplicationFactory>
 
     public TodosEndpointTests(CustomWebApplicationFactory factory) => _client = factory.CreateClient();
 
-
     [Fact]
     public async Task GetTodos_ReturnsInitialList()
     {
