@@ -1,4 +1,4 @@
-namespace WebApi.Models;
+namespace Web.Api.Models;
 
 public class PatchTodoItemDTO
 {
