@@ -39,3 +39,7 @@ Aggiunto report di copertura dei test.
 ### Step 9
 
 Aggiunti test di unità e fatto refacto di Program.cs spostando la logica in un servizio esterno.
+
+### Step 10
+
+Aggiunta persistenza dei dati con EntitiFrameworkCore e database SqLite. Sostituiti tutti i metodi sincroni con corrispondenti metodi asincroni. Aggiornate le classi di test.

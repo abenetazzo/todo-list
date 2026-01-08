@@ -1,56 +1,62 @@
-using System;
+using Microsoft.EntityFrameworkCore;
+using Web.Api.Data;
 using Web.Api.Models;
 
 namespace Web.Api.Services;
 
-public class TodoService
+public class TodoService: ITodoService
 {
-    private readonly List<TodoItem> _todos = new()
+    private readonly AppDbContext _context;
+
+    public TodoService(AppDbContext context)
     {
-        new TodoItem { Id = 1, Title = "Learn ASP.NET Core", IsCompleted = false },
-        new TodoItem { Id = 2, Title = "Build a Web API", IsCompleted = false },
-        new TodoItem { Id = 3, Title = "Write Documentation", IsCompleted = true }
-    };
+        _context = context;
+    }
 
-    public List<TodoItem> GetAll() => _todos;
+    public async Task<List<TodoItem>> GetAllAsync() =>
+        await _context.TodoItems.ToListAsync();
 
-    public TodoItem? GetById(int id) => _todos.SingleOrDefault(t => t.Id == id);
+    public async Task<TodoItem?> GetByIdAsync(int id) =>
+        await _context.TodoItems.FindAsync(id);
 
-    public TodoItem Create(CreateTodoItemDTO dto)
+    public async Task<TodoItem> CreateAsync(CreateTodoItemDTO dto)
     {
         var newTodo = new TodoItem
         {
-            Id = _todos.Any() ? _todos.Max(t => t.Id) + 1 : 1,
             Title = dto.Title,
             IsCompleted = dto.IsCompleted
         };
-        _todos.Add(newTodo);
+        _context.TodoItems.Add(newTodo);
+        await _context.SaveChangesAsync();
         return newTodo;
     }
 
-    public bool Delete(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        var todo = GetById(id);
+        var todo = await GetByIdAsync(id);
         if (todo is null) return false;
-        _todos.Remove(todo);
+        _context.TodoItems.Remove(todo);
+        await _context.SaveChangesAsync();
         return true;
     }
 
-    public TodoItem? Update(int id, UpdateTodoItemDTO dto)
+    public async Task<TodoItem?> UpdateAsync(int id, UpdateTodoItemDTO dto)
     {
-        var todo = GetById(id);
+        var todo = await GetByIdAsync(id);
         if (todo is null) return null;
         todo.Title = dto.Title;
         todo.IsCompleted = dto.IsCompleted;
+        await _context.SaveChangesAsync();
         return todo;
     }
 
-    public TodoItem? Patch(int id, PatchTodoItemDTO dto)
+    public async Task<TodoItem?> PatchAsync(int id, PatchTodoItemDTO dto)
     {
-        var todo = GetById(id);
+        var todo = await GetByIdAsync(id);
         if (todo is null) return null;
         if (dto.Title is not null) todo.Title = dto.Title;
         if (dto.IsCompleted.HasValue) todo.IsCompleted = dto.IsCompleted.Value;
+        await _context.SaveChangesAsync();
         return todo;
     }
 }

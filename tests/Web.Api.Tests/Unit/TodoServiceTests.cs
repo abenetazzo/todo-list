@@ -1,22 +1,40 @@
+using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
-using System.Net;
-using System.Net.Http.Json;
 using Xunit;
 using Web.Api.Models;
 using Web.Api.Services;
-using Web.Api;
+using Web.Api.Data;
 
 namespace Web.Api.Tests.Unit;
 
 public class TodoServiceTests
 {
-    private readonly TodoService _todoService = new();
+    private readonly AppDbContext _context;
+    private readonly ITodoService _todoService;
+
+    public TodoServiceTests()
+    {
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        _context = new AppDbContext(options);
+
+        // Seed data
+        _context.TodoItems.AddRange(
+            new TodoItem { Id = 1, Title = "Learn ASP.NET Core", IsCompleted = false },
+            new TodoItem { Id = 2, Title = "Build a Web API", IsCompleted = false },
+            new TodoItem { Id = 3, Title = "Write Documentation", IsCompleted = true }
+        );
+        _context.SaveChanges();
+
+        _todoService = new TodoService(_context);
+    }
 
     [Fact]
-    public void GetAll_ReturnsInitialTodos()
+    public async Task GetAllAsync_ReturnsInitialTodos()
     {
         // Act
-        var todos = _todoService.GetAll();
+        var todos = await _todoService.GetAllAsync();
 
         // Assert
         todos.Should().NotBeNull();
@@ -24,10 +42,10 @@ public class TodoServiceTests
     }
 
     [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public void GetById_ExistingId_ReturnsTodoItem(int id)
+    public async Task GetByIdAsync_ExistingId_ReturnsTodoItem(int id)
     {
         // Act
-        var todo = _todoService.GetById(id);
+        var todo = await _todoService.GetByIdAsync(id);
 
         // Assert
         todo.Should().NotBeNull();
@@ -35,17 +53,17 @@ public class TodoServiceTests
     }
 
     [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public void GetById_NonExistentId_ReturnsNull(int id)
+    public async Task GetByIdAsync_NonExistentId_ReturnsNull(int id)
     {
         // Act
-        var todo = _todoService.GetById(id);
+        var todo = await _todoService.GetByIdAsync(id);
 
         // Assert
         todo.Should().BeNull();
     }
 
     [Fact]
-    public void Create_AddsNewTodoItem()
+    public async Task CreateAsync_AddsNewTodoItem()
     {
         // Arrange
         var newTodoDto = new CreateTodoItemDTO
@@ -55,8 +73,8 @@ public class TodoServiceTests
         };
 
         // Act
-        var createdTodo = _todoService.Create(newTodoDto);
-        var todos = _todoService.GetAll();
+        var createdTodo = await _todoService.CreateAsync(newTodoDto);
+        var todos = await _todoService.GetAllAsync();
 
         // Assert
         createdTodo.Should().NotBeNull();
@@ -67,12 +85,12 @@ public class TodoServiceTests
     }
 
     [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public void Delete_ExistingId_RemovesTodoItem(int id)
+    public async Task DeleteAsync_ExistingId_RemovesTodoItem(int id)
     {
         // Act
-        var result = _todoService.Delete(id);
-        var todo = _todoService.GetById(id);
-        var todos = _todoService.GetAll();
+        var result = await _todoService.DeleteAsync(id);
+        var todo = await _todoService.GetByIdAsync(id);
+        var todos = await _todoService.GetAllAsync();
 
         // Assert
         result.Should().BeTrue();
@@ -81,17 +99,17 @@ public class TodoServiceTests
     }
 
     [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public void Delete_NonExistentId_ReturnsFalse(int id)
+    public async Task DeleteAsync_NonExistentId_ReturnsFalse(int id)
     {
         // Act
-        var result = _todoService.Delete(id);
+        var result = await _todoService.DeleteAsync(id);
 
         // Assert
         result.Should().BeFalse();
     }
 
     [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public void Update_ExistingId_UpdatesTodoItem(int id)
+    public async Task UpdateAsync_ExistingId_UpdatesTodoItem(int id)
     {
         // Arrange
         var updateDto = new UpdateTodoItemDTO
@@ -101,8 +119,8 @@ public class TodoServiceTests
         };
 
         // Act
-        var updatedTodo = _todoService.Update(id, updateDto);
-        var todo = _todoService.GetById(id);
+        var updatedTodo = await _todoService.UpdateAsync(id, updateDto);
+        var todo = await _todoService.GetByIdAsync(id);
 
         // Assert
         updatedTodo.Should().NotBeNull();
@@ -111,7 +129,7 @@ public class TodoServiceTests
     }
 
     [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public void Update_NonExistentId_ReturnsNull(int id)
+    public async Task UpdateAsync_NonExistentId_ReturnsNull(int id)
     {
         // Arrange
         var updateDto = new UpdateTodoItemDTO
@@ -121,14 +139,14 @@ public class TodoServiceTests
         };
 
         // Act
-        var updatedTodo = _todoService.Update(id, updateDto);
+        var updatedTodo = await _todoService.UpdateAsync(id, updateDto);
 
         // Assert
         updatedTodo.Should().BeNull();
     }
 
     [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public void Patch_ExistingId_PartiallyUpdatesTodoItem(int id)
+    public async Task PatchAsync_ExistingId_PartiallyUpdatesTodoItem(int id)
     {
         // Arrange
         var patchDto = new PatchTodoItemDTO
@@ -136,11 +154,11 @@ public class TodoServiceTests
             Title = "Patched Title"
             // IsCompleted is not set
         };
-        var originalTodo = _todoService.GetById(id);
+        var originalTodo = await _todoService.GetByIdAsync(id);
 
         // Act
-        var patchedTodo = _todoService.Patch(id, patchDto);
-        var todo = _todoService.GetById(id);
+        var patchedTodo = await _todoService.PatchAsync(id, patchDto);
+        var todo = await _todoService.GetByIdAsync(id);
 
         // Assert
         patchedTodo.Should().NotBeNull();
@@ -149,7 +167,7 @@ public class TodoServiceTests
     }
 
     [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public void Patch_NonExistentId_ReturnsNull(int id)
+    public async Task PatchAsync_NonExistentId_ReturnsNull(int id)
     {
         // Arrange
         var patchDto = new PatchTodoItemDTO
@@ -158,7 +176,7 @@ public class TodoServiceTests
         };
 
         // Act
-        var patchedTodo = _todoService.Patch(id, patchDto);
+        var patchedTodo = await _todoService.PatchAsync(id, patchDto);
 
         // Assert
         patchedTodo.Should().BeNull();

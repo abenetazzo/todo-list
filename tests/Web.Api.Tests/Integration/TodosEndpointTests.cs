@@ -1,17 +1,39 @@
-using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Net;
 using System.Net.Http.Json;
-using Xunit;
+using FluentAssertions;
+using Web.Api.Data;
+using Web.Api.Services;
 using Web.Api.Models;
-using Web.Api;
 
 namespace Web.Api.Tests.Integration;
 
 public class TodosEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
+    private static bool _seeded = false;
 
-    public TodosEndpointTests(CustomWebApplicationFactory factory) => _client = factory.CreateClient();
+    public TodosEndpointTests(CustomWebApplicationFactory factory)
+    {
+        _client = factory.CreateClient();
+
+        // Seed una volta per fixture
+        if (!_seeded)
+        {
+            using var scope = factory.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.TodoItems.AddRange(
+                new TodoItem { Id = 1, Title = "Learn ASP.NET Core", IsCompleted = false },
+                new TodoItem { Id = 2, Title = "Build a Web API", IsCompleted = false },
+                new TodoItem { Id = 3, Title = "Write Documentation", IsCompleted = true }
+            );
+            context.SaveChanges();
+            _seeded = true;
+        }
+    }
 
     [Fact]
     public async Task GetTodos_ReturnsInitialList()
@@ -25,7 +47,7 @@ public class TodosEndpointTests : IClassFixture<CustomWebApplicationFactory>
         todos.Should().NotBeNull();
         todos!.Count.Should().Be(3);
     }
-
+    
     [Fact]
     public async Task GetTodoById_ReturnsCorrectTodo()
     {

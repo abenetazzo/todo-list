@@ -58,3 +58,6 @@ coverage/
 
 # Mac specific
 .DS_Store
+
+# Database
+*.db

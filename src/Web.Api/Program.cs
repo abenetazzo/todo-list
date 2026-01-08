@@ -1,5 +1,7 @@
-using Web.Api.Models;
+using Microsoft.EntityFrameworkCore;
 using Web.Api.Services;
+using Web.Api.Data;
+using Web.Api.Models;
 
 namespace Web.Api;
 
@@ -12,7 +14,19 @@ public partial class Program
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
-        builder.Services.AddScoped<TodoService>();
+        // DbContext condizionale
+        if (builder.Environment.IsEnvironment("Testing"))
+        {
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseInMemoryDatabase("IntegrationTestDb"));
+        }
+        else
+        {
+            var conn = builder.Configuration.GetConnectionString("DefaultConnection")!;
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(conn));
+        }
+        builder.Logging.AddConsole().SetMinimumLevel(LogLevel.Debug);
+        builder.Services.AddScoped<ITodoService, TodoService>();
 
         var app = builder.Build();
 
@@ -25,17 +39,23 @@ public partial class Program
         app.UseHttpsRedirection();
 
         // Endpoints
-        app.MapGet("/todos", (TodoService service) => service.GetAll())
+        app.MapGet("/todos", async (ITodoService service) =>
+            await service.GetAllAsync())
             .WithName("GetTodos");
-        app.MapGet("/todos/{id}", (int id, TodoService service) => service.GetById(id) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
+        app.MapGet("/todos/{id}", async (int id, ITodoService service) =>
+            await service.GetByIdAsync(id) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("GetTodoById");
-        app.MapPost("/todos", (CreateTodoItemDTO newTodo, TodoService service) => service.Create(newTodo) is TodoItem todoItem ? Results.Created($"/todos/{todoItem.Id}", todoItem) : Results.BadRequest())
+        app.MapPost("/todos", async (CreateTodoItemDTO newTodo, ITodoService service) =>
+            await service.CreateAsync(newTodo) is TodoItem todoItem ? Results.Created($"/todos/{todoItem.Id}", todoItem) : Results.BadRequest())
             .WithName("AddTodo");
-        app.MapDelete("/todos/{id}", (int id, TodoService service) => service.Delete(id) ? Results.NoContent() : Results.NotFound())
+        app.MapDelete("/todos/{id}", async (int id, ITodoService service) =>
+            await service.DeleteAsync(id) ? Results.NoContent() : Results.NotFound())
             .WithName("DeleteTodo");
-        app.MapPut("/todos/{id}", (int id, UpdateTodoItemDTO updatedTodo, TodoService service) => service.Update(id, updatedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
+        app.MapPut("/todos/{id}", async (int id, UpdateTodoItemDTO updatedTodo, ITodoService service) =>
+            await service.UpdateAsync(id, updatedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("UpdateTodo");
-        app.MapPatch("/todos/{id}", (int id, PatchTodoItemDTO patchedTodo, TodoService service) => service.Patch(id, patchedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
+        app.MapPatch("/todos/{id}", async (int id, PatchTodoItemDTO patchedTodo, ITodoService service) =>
+            await service.PatchAsync(id, patchedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("PatchTodo");
 
         // Run the application
