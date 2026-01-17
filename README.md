@@ -43,3 +43,7 @@ Aggiunti test di unità e fatto refacto di Program.cs spostando la logica in un 
 ### Step 10
 
 Aggiunta persistenza dei dati con EntitiFrameworkCore e database SqLite. Sostituiti tutti i metodi sincroni con corrispondenti metodi asincroni. Aggiornate le classi di test.
+
+### Step 11
+
+Aggiunta interfaccia grafica Blazor (pagina index default).

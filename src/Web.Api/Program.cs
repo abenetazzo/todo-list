@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.WebAssembly.Server;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 using Web.Api.Services;
 using Web.Api.Data;
 using Web.Api.Models;
@@ -10,7 +13,7 @@ public partial class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+/**/
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -27,6 +30,8 @@ public partial class Program
         }
         builder.Logging.AddConsole().SetMinimumLevel(LogLevel.Debug);
         builder.Services.AddScoped<ITodoService, TodoService>();
+        builder.Services.AddControllers();
+        builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
 
@@ -37,7 +42,16 @@ public partial class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseStaticFiles();
+/**/
+/*
+        builder.Services.AddControllersWithViews();
 
+        var app = builder.Build();
+
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+*/
         // Endpoints
         app.MapGet("/todos", async (ITodoService service) =>
             await service.GetAllAsync())
@@ -57,6 +71,9 @@ public partial class Program
         app.MapPatch("/todos/{id}", async (int id, PatchTodoItemDTO patchedTodo, ITodoService service) =>
             await service.PatchAsync(id, patchedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("PatchTodo");
+
+        app.MapControllers();
+        app.MapFallbackToFile("index.html");
 
         // Run the application
         app.Run();
