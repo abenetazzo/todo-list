@@ -1,4 +1,4 @@
-namespace Web.Api.Models;
+namespace Web.Domain.Todos;
 
 public class TodoItem
 {

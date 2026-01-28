@@ -55,3 +55,7 @@ Interfaccia grafica per la visualizzazione della Todo list e gestite le CRUD.
 ### Step 13
 
 Aggiunta interfaccia grafica Blazor in client separato (pagina index default).
+
+### Step 14
+
+Refactor, spostati i modelli in un progetto dedicato in modo che siano condivisi tra tutti i progetti e non duplicati.

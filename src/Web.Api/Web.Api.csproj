@@ -23,6 +23,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0" />
     <ProjectReference Include="..\Client\Client.csproj" />
+    <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
   </ItemGroup>
 
 </Project>

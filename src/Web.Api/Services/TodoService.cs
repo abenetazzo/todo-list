@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Web.Api.Data;
-using Web.Api.Models;
+using Web.Domain.Todos;
 
 namespace Web.Api.Services;
 

@@ -1,6 +1,6 @@
-namespace Web.Api.Models;
+namespace Web.Domain.Todos;
 
-public class CreateTodoItemDTO
+public class UpdateTodoItemDTO
 {
     public string Title { get; set; } = string.Empty;
     public bool IsCompleted { get; set; }

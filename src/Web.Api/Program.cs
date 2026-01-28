@@ -4,7 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Web.Api.Services;
 using Web.Api.Data;
-using Web.Api.Models;
+using Web.Domain.Todos;
 
 namespace Web.Api;
 
@@ -51,10 +51,17 @@ public partial class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            //app.MapOpenApi();
+            app.UseDeveloperExceptionPage();
+            app.UseWebAssemblyDebugging();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
         }
 
         app.UseHttpsRedirection();
+        app.UseBlazorFrameworkFiles();
         app.UseCors(allowedOrigins);
         app.UseStaticFiles();
         
@@ -78,6 +85,7 @@ public partial class Program
             await service.PatchAsync(id, patchedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("PatchTodo");
 
+        app.UseRouting();
         app.MapControllers();
         app.MapFallbackToFile("index.html");
 
