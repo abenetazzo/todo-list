@@ -13,7 +13,20 @@ public partial class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-/**/
+
+        // CORS
+        var allowedOrigins = "_allowedOrigins";
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: allowedOrigins,
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:5196") // Da spostare in un file di configurazione
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+        });
+
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -42,16 +55,9 @@ public partial class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseCors(allowedOrigins);
         app.UseStaticFiles();
-/**/
-/*
-        builder.Services.AddControllersWithViews();
-
-        var app = builder.Build();
-
-        app.UseHttpsRedirection();
-        app.UseStaticFiles();
-*/
+        
         // Endpoints
         app.MapGet("/todos", async (ITodoService service) =>
             await service.GetAllAsync())
