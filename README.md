@@ -47,3 +47,7 @@ Aggiunta persistenza dei dati con EntitiFrameworkCore e database SqLite. Sostitu
 ### Step 11
 
 Aggiunta interfaccia grafica Blazor (pagina index default).
+
+### Step 12
+
+Interfaccia grafica per la visualizzazione della Todo list e gestite le CRUD.
