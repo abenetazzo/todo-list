@@ -51,7 +51,7 @@ public partial class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            //app.MapOpenApi();
+            app.MapOpenApi();
             app.UseDeveloperExceptionPage();
             app.UseWebAssemblyDebugging();
         }
