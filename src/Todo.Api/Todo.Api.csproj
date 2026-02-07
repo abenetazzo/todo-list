@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Web.Api</RootNamespace>
+    <RootNamespace>Todo.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0" />
     <ProjectReference Include="..\Client\Client.csproj" />
-    <ProjectReference Include="..\Web.Domain\Web.Domain.csproj" />
+    <ProjectReference Include="..\Todo.Domain\Todo.Domain.csproj" />
   </ItemGroup>
 
 </Project>

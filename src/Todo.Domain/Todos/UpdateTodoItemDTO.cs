@@ -1,6 +1,6 @@
-namespace Web.Domain.Todos;
+namespace Todo.Domain.Todos;
 
-public class CreateTodoItemDTO
+public class UpdateTodoItemDTO
 {
     public string Title { get; set; } = string.Empty;
     public bool IsCompleted { get; set; }

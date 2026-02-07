@@ -5,11 +5,11 @@ using Microsoft.Extensions.Hosting;
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using Web.Api.Data;
-using Web.Api.Services;
-using Web.Api.Models;
+using Todo.Api.Data;
+using Todo.Api.Services;
+using Todo.Api.Models;
 
-namespace Web.Api.Tests.Integration;
+namespace Todo.Api.Tests.Integration;
 
 public class TodosEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {

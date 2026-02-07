@@ -2,11 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.WebAssembly.Server;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
-using Web.Api.Services;
-using Web.Api.Data;
-using Web.Domain.Todos;
+using Todo.Api.Services;
+using Todo.Api.Data;
+using Todo.Domain.Todos;
 
-namespace Web.Api;
+namespace Todo.Api;
 
 public partial class Program
 {

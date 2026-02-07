@@ -1,8 +1,7 @@
-namespace Web.Domain.Todos;
+namespace Todo.Domain.Todos;
 
-public class TodoItem
+public class CreateTodoItemDTO
 {
-    public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public bool IsCompleted { get; set; }
 }

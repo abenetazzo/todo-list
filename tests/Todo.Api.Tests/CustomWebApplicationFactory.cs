@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Web.Api.Data;
-using Web.Api.Models;
-using Web.Api.Services;
+using Todo.Api.Data;
+using Todo.Api.Models;
+using Todo.Api.Services;
 
-namespace Web.Api.Tests;
+namespace Todo.Api.Tests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {

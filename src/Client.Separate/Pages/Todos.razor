@@ -1,5 +1,5 @@
 @page "/todos"
-@using Web.Domain.Todos
+@using Todo.Domain.Todos
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 
@@ -69,17 +69,11 @@
     private CreateTodoItemDTO newTodo = new();
     private TodoItem? editingTodo;
     private bool isEditing = false;
-    private bool isEditing2 = true;
-    private bool _visible;
-    private int _rating;
     private readonly DialogOptions _dialogOptions = new() { FullWidth = true };
-    private void OpenDialog() => _visible = true;
-    private void Submit() => _visible = false;
     
     protected override async Task OnInitializedAsync()
     {
         await LoadTodos();
-        isEditing2 = true;
     }
 
     private async Task LoadTodos()

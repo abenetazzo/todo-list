@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Web.Domain.Todos;
+using Todo.Domain.Todos;
 
-namespace Web.Api.Data;
+namespace Todo.Api.Data;
 
 public class AppDbContext : DbContext
 {

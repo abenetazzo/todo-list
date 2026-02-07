@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
 using Xunit;
-using Web.Api.Models;
-using Web.Api.Services;
-using Web.Api.Data;
+using Todo.Api.Models;
+using Todo.Api.Services;
+using Todo.Api.Data;
 
-namespace Web.Api.Tests.Unit;
+namespace Todo.Api.Tests.Unit;
 
 public class TodoServiceTests
 {

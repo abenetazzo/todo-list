@@ -1,4 +1,4 @@
-# MINIMAL WEB-API
+# Todo Items list - MINIMAL WEB-API
 
 Questo progetto ha come obiettivo l'apprendimento base del framework .NET CORE e della creazione di un nuovo progetto Web-API.
 

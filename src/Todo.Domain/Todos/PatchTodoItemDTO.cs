@@ -1,4 +1,4 @@
-namespace Web.Domain.Todos;
+namespace Todo.Domain.Todos;
 
 public class PatchTodoItemDTO
 {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Web.Api.Migrations
+namespace Todo.Api.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

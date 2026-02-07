@@ -1,6 +1,6 @@
-using Web.Domain.Todos;
+using Todo.Domain.Todos;
 
-namespace Web.Api.Services;
+namespace Todo.Api.Services;
 
 public interface ITodoService
 {

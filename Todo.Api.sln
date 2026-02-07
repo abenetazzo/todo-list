@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Api", "src\Web.Api\Web.Api.csproj", "{B842860C-E4FF-4D72-B256-962569C4BA91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.Api", "src\Todo.Api\Todo.Api.csproj", "{B842860C-E4FF-4D72-B256-962569C4BA91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "src\Client\Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Separate", "src\Client.Separate\Client.Separate.csproj", "{8A3D1292-8CD1-400B-BE49-9F1B481C3B88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Domain", "src\Web.Domain\Web.Domain.csproj", "{DC3A96C6-0A75-433A-AC00-C58138055C78}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Domain", "src\Todo.Domain\Todo.Domain.csproj", "{DC3A96C6-0A75-433A-AC00-C58138055C78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

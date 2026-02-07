@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Web.Api.Data;
-using Web.Domain.Todos;
+using Todo.Api.Data;
+using Todo.Domain.Todos;
 
-namespace Web.Api.Services;
+namespace Todo.Api.Services;
 
 public class TodoService: ITodoService
 {
