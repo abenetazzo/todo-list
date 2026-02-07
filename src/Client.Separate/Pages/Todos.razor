@@ -1,89 +1,85 @@
 @page "/todos"
 @using Web.Domain.Todos
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 
-<PageTitle>Todo List</PageTitle>
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudText Typo="Typo.h4" GutterBottom="true">Todo List - MudBlazor</MudText>
 
-@if (todos == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <h3>Todo List</h3>
+    <!-- Nuovo Todo -->
+    <MudPaper Class="pa-4 mb-4">
+        <MudText Typo="Typo.h6">Aggiungi un nuovo Todo</MudText>
+        <MudTextField Label="Descrizione Todo" @bind-Value="newTodo.Title" FullWidth="true" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateTodo" Class="mt-2">
+            Aggiungi
+        </MudButton>
+    </MudPaper>
 
-    <h4>Nuovo todo</h4>
-
-    <div class="mb-3">
-        <input class="form-control"
-               @bind="newTodo.Title"
-               placeholder="Descrizione todo" />
-    </div>
-    <button class="btn btn-primary" @onclick="CreateTodo">Aggiungi</button>
-
-    @if (editingTodo != null)
+    <!-- Griglia di Todo -->
+    @if (todos == null)
     {
-        <hr />
-        <div class="card mt-3">
-            <div class="card-header">
-                <h5>Modifica Todo #@editingTodo.Id</h5>
-            </div>
-            <div class="card-body">
-                <input class="form-control mb-2" @bind="editingTodo.Title" />
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" @bind="editingTodo.IsCompleted" /> Completato
-                    </label>
-                </div>
-                <button class="btn btn-success mt-2 me-2" @onclick="UpdateTodo">Salva</button>
-                <button class="btn btn-secondary mt-2" @onclick="CancelEdit">Annulla</button>
-            </div>
-        </div>
+        <MudText Typo="Typo.subtitle1" Color="Color.Secondary">Caricamento...</MudText>
     }
-
-    <hr />
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Titolo</th>
-                <th>Completato</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
+    else if (!todos.Any())
+    {
+        <MudText Typo="Typo.subtitle1" Color="Color.Secondary">Nessun todo trovato.</MudText>
+    }
+    else
+    {
+        <MudGrid>
             @foreach (var todo in todos)
             {
-                <tr>
-                    <td>@todo.Id</td>
-                    <td>
-                        <label><input type="checkbox" @bind="todo.IsCompleted" />
-                        @todo.Title</label>
-                    </td>
-                    <td>@todo.IsCompleted</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" @onclick="() => EditTodo(todo)">
-                            Modifica
-                        </button>
-                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteTodo(todo.Id)">
-                            Elimina
-                        </button>
-                    </td>
-                </tr>
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@todo.Title</MudText>
+                            <MudChip T="string" Color="@GetChipColor(todo.IsCompleted)" Class="mt-2">
+                                @(todo.IsCompleted ? "Completato" : "Incompleto")
+                            </MudChip>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => EditTodo(todo)">
+                                <MudIcon Icon="@Icons.Material.Filled.Edit" /> Modifica
+                            </MudButton>
+                            <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="() => DeleteTodo(todo.Id)">
+                                <MudIcon Icon="@Icons.Material.Filled.Delete" /> Elimina
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
             }
-        </tbody>
-    </table>
-}
+        </MudGrid>
+    }
+
+    <MudDialog @bind-Visible="isEditing" MaxWidth="MaxWidth.Small">
+        <DialogContent>
+            <MudText Typo="Typo.h6">Modifica Todo</MudText>
+            <MudTextField Label="Titolo" @bind-Value="editingTodo!.Title" FullWidth="true" />
+            <MudCheckBox T="bool" Label="Completato" @bind-Value="editingTodo.IsCompleted" />
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="UpdateTodo" Color="Color.Primary">Salva</MudButton>
+            <MudButton OnClick="CancelEdit" Color="Color.Secondary">Annulla</MudButton>
+        </DialogActions>
+    </MudDialog>
+</MudContainer>
 
 @code {
     private TodoItem[]? todos;
     private CreateTodoItemDTO newTodo = new();
     private TodoItem? editingTodo;
+    private bool isEditing = false;
+    private bool isEditing2 = true;
+    private bool _visible;
+    private int _rating;
+    private readonly DialogOptions _dialogOptions = new() { FullWidth = true };
+    private void OpenDialog() => _visible = true;
+    private void Submit() => _visible = false;
     
     protected override async Task OnInitializedAsync()
     {
         await LoadTodos();
+        isEditing2 = true;
     }
 
     private async Task LoadTodos()
@@ -110,17 +106,15 @@ else
 
     private void EditTodo(TodoItem todo)
     {
-        editingTodo = new TodoItem
-        {
-            Id = todo.Id,
-            Title = todo.Title,
-            IsCompleted = todo.IsCompleted
-        };
+        editingTodo = todo;
+        isEditing = true;
     }
 
     private void CancelEdit()
     {
         editingTodo = null;
+        isEditing = false;
+        StateHasChanged();
     }
 
     private async Task UpdateTodo()
@@ -132,6 +126,7 @@ else
         {
             await LoadTodos();
             editingTodo = null;
+            isEditing = false;
         }
     }
 
@@ -142,5 +137,12 @@ else
         {
             await LoadTodos();
         }
+    }
+
+    private Color GetChipColor(bool isCompleted) => isCompleted ? Color.Success : Color.Warning;
+
+    private async Task LogToConsole(string message)
+    {
+        await JSRuntime.InvokeVoidAsync("console.log", message);
     }
 }
