@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
 using Xunit;
-using Todo.Api.Models;
+using Todo.Domain.Todos;
 using Todo.Api.Services;
 using Todo.Api.Data;
 
@@ -21,9 +21,9 @@ public class TodoServiceTests
 
         // Seed data
         _context.TodoItems.AddRange(
-            new TodoItem { Id = 1, Title = "Learn ASP.NET Core", IsCompleted = false },
-            new TodoItem { Id = 2, Title = "Build a Web API", IsCompleted = false },
-            new TodoItem { Id = 3, Title = "Write Documentation", IsCompleted = true }
+            new TodoItem { Id = new Guid("2d41d56a-ac21-475d-8fbc-62d54f10ce94"), Title = "Primo todoItem", IsCompleted = false },
+            new TodoItem { Id = new Guid("ca781d57-5ec2-45fd-8726-4157286f4889"), Title = "Secondo todoItem", IsCompleted = false },
+            new TodoItem { Id = new Guid("3ddcf8cc-dabb-4492-ab41-e81d54fd05c2"), Title = "Test finale ok", IsCompleted = true }
         );
         _context.SaveChanges();
 
@@ -41,8 +41,11 @@ public class TodoServiceTests
         todos.Count.Should().Be(3);
     }
 
-    [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public async Task GetByIdAsync_ExistingId_ReturnsTodoItem(int id)
+    [Theory]
+    [InlineData("2d41d56a-ac21-475d-8fbc-62d54f10ce94")]
+    [InlineData("ca781d57-5ec2-45fd-8726-4157286f4889")]
+    [InlineData("3ddcf8cc-dabb-4492-ab41-e81d54fd05c2")]
+    public async Task GetByIdAsync_ExistingId_ReturnsTodoItem(Guid id)
     {
         // Act
         var todo = await _todoService.GetByIdAsync(id);
@@ -52,8 +55,8 @@ public class TodoServiceTests
         todo!.Id.Should().Be(id);
     }
 
-    [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public async Task GetByIdAsync_NonExistentId_ReturnsNull(int id)
+    [Theory] [InlineData("f3c1a4c2-9e7b-4c8e-9d7a-2b4f6e8c1a55")]
+    public async Task GetByIdAsync_NonExistentId_ReturnsNull(Guid id)
     {
         // Act
         var todo = await _todoService.GetByIdAsync(id);
@@ -78,14 +81,16 @@ public class TodoServiceTests
 
         // Assert
         createdTodo.Should().NotBeNull();
-        createdTodo.Id.Should().BeGreaterThan(0);
         createdTodo.Title.Should().Be(newTodoDto.Title);
         createdTodo.IsCompleted.Should().Be(newTodoDto.IsCompleted);
         todos.Count.Should().Be(4); // Initial 3 + 1 new
     }
 
-    [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public async Task DeleteAsync_ExistingId_RemovesTodoItem(int id)
+    [Theory]
+    [InlineData("2d41d56a-ac21-475d-8fbc-62d54f10ce94")]
+    [InlineData("ca781d57-5ec2-45fd-8726-4157286f4889")]
+    [InlineData("3ddcf8cc-dabb-4492-ab41-e81d54fd05c2")]
+    public async Task DeleteAsync_ExistingId_RemovesTodoItem(Guid id)
     {
         // Act
         var result = await _todoService.DeleteAsync(id);
@@ -98,8 +103,8 @@ public class TodoServiceTests
         todos.Count.Should().Be(2); // Initial 3 - 1 deleted
     }
 
-    [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public async Task DeleteAsync_NonExistentId_ReturnsFalse(int id)
+    [Theory] [InlineData("f3c1a4c2-9e7b-4c8e-9d7a-2b4f6e8c1a55")]
+    public async Task DeleteAsync_NonExistentId_ReturnsFalse(Guid id)
     {
         // Act
         var result = await _todoService.DeleteAsync(id);
@@ -108,8 +113,11 @@ public class TodoServiceTests
         result.Should().BeFalse();
     }
 
-    [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public async Task UpdateAsync_ExistingId_UpdatesTodoItem(int id)
+    [Theory]
+    [InlineData("2d41d56a-ac21-475d-8fbc-62d54f10ce94")]
+    [InlineData("ca781d57-5ec2-45fd-8726-4157286f4889")]
+    [InlineData("3ddcf8cc-dabb-4492-ab41-e81d54fd05c2")]
+    public async Task UpdateAsync_ExistingId_UpdatesTodoItem(Guid id)
     {
         // Arrange
         var updateDto = new UpdateTodoItemDTO
@@ -128,8 +136,8 @@ public class TodoServiceTests
         updatedTodo.IsCompleted.Should().Be(updateDto.IsCompleted);
     }
 
-    [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public async Task UpdateAsync_NonExistentId_ReturnsNull(int id)
+    [Theory] [InlineData("f3c1a4c2-9e7b-4c8e-9d7a-2b4f6e8c1a55")]
+    public async Task UpdateAsync_NonExistentId_ReturnsNull(Guid id)
     {
         // Arrange
         var updateDto = new UpdateTodoItemDTO
@@ -145,8 +153,11 @@ public class TodoServiceTests
         updatedTodo.Should().BeNull();
     }
 
-    [Theory] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    public async Task PatchAsync_ExistingId_PartiallyUpdatesTodoItem(int id)
+    [Theory]
+    [InlineData("2d41d56a-ac21-475d-8fbc-62d54f10ce94")]
+    [InlineData("ca781d57-5ec2-45fd-8726-4157286f4889")]
+    [InlineData("3ddcf8cc-dabb-4492-ab41-e81d54fd05c2")]
+    public async Task PatchAsync_ExistingId_PartiallyUpdatesTodoItem(Guid id)
     {
         // Arrange
         var patchDto = new PatchTodoItemDTO
@@ -166,8 +177,8 @@ public class TodoServiceTests
         patchedTodo.IsCompleted.Should().Be(originalTodo!.IsCompleted); // Should remain unchanged
     }
 
-    [Theory] [InlineData(999)] [InlineData(-1)] [InlineData(0)]
-    public async Task PatchAsync_NonExistentId_ReturnsNull(int id)
+    [Theory] [InlineData("f3c1a4c2-9e7b-4c8e-9d7a-2b4f6e8c1a55")]
+    public async Task PatchAsync_NonExistentId_ReturnsNull(Guid id)
     {
         // Arrange
         var patchDto = new PatchTodoItemDTO
