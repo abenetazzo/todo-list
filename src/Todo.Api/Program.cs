@@ -69,19 +69,19 @@ public partial class Program
         app.MapGet("/todos", async (ITodoService service) =>
             await service.GetAllAsync())
             .WithName("GetTodos");
-        app.MapGet("/todos/{id}", async (int id, ITodoService service) =>
+        app.MapGet("/todos/{id}", async (Guid id, ITodoService service) =>
             await service.GetByIdAsync(id) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("GetTodoById");
         app.MapPost("/todos", async (CreateTodoItemDTO newTodo, ITodoService service) =>
             await service.CreateAsync(newTodo) is TodoItem todoItem ? Results.Created($"/todos/{todoItem.Id}", todoItem) : Results.BadRequest())
             .WithName("AddTodo");
-        app.MapDelete("/todos/{id}", async (int id, ITodoService service) =>
+        app.MapDelete("/todos/{id}", async (Guid id, ITodoService service) =>
             await service.DeleteAsync(id) ? Results.NoContent() : Results.NotFound())
             .WithName("DeleteTodo");
-        app.MapPut("/todos/{id}", async (int id, UpdateTodoItemDTO updatedTodo, ITodoService service) =>
+        app.MapPut("/todos/{id}", async (Guid id, UpdateTodoItemDTO updatedTodo, ITodoService service) =>
             await service.UpdateAsync(id, updatedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("UpdateTodo");
-        app.MapPatch("/todos/{id}", async (int id, PatchTodoItemDTO patchedTodo, ITodoService service) =>
+        app.MapPatch("/todos/{id}", async (Guid id, PatchTodoItemDTO patchedTodo, ITodoService service) =>
             await service.PatchAsync(id, patchedTodo) is TodoItem todo ? Results.Ok(todo) : Results.NotFound())
             .WithName("PatchTodo");
 

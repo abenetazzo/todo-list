@@ -135,7 +135,7 @@ else
         }
     }
 
-    private async Task DeleteTodo(int id)
+    private async Task DeleteTodo(Guid id)
     {
         var response = await Http.DeleteAsync($"todos/{id}");
         if (response.IsSuccessStatusCode)

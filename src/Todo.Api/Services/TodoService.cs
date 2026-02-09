@@ -16,7 +16,7 @@ public class TodoService: ITodoService
     public async Task<List<TodoItem>> GetAllAsync() =>
         await _context.TodoItems.ToListAsync();
 
-    public async Task<TodoItem?> GetByIdAsync(int id) =>
+    public async Task<TodoItem?> GetByIdAsync(Guid id) =>
         await _context.TodoItems.FindAsync(id);
 
     public async Task<TodoItem> CreateAsync(CreateTodoItemDTO dto)
@@ -31,7 +31,7 @@ public class TodoService: ITodoService
         return newTodo;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         var todo = await GetByIdAsync(id);
         if (todo is null) return false;
@@ -40,7 +40,7 @@ public class TodoService: ITodoService
         return true;
     }
 
-    public async Task<TodoItem?> UpdateAsync(int id, UpdateTodoItemDTO dto)
+    public async Task<TodoItem?> UpdateAsync(Guid id, UpdateTodoItemDTO dto)
     {
         var todo = await GetByIdAsync(id);
         if (todo is null) return null;
@@ -50,7 +50,7 @@ public class TodoService: ITodoService
         return todo;
     }
 
-    public async Task<TodoItem?> PatchAsync(int id, PatchTodoItemDTO dto)
+    public async Task<TodoItem?> PatchAsync(Guid id, PatchTodoItemDTO dto)
     {
         var todo = await GetByIdAsync(id);
         if (todo is null) return null;
